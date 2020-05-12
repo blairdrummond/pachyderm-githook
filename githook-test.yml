@@ -1,0 +1,33 @@
+pipeline:
+  name: pachyderm-githook-test
+description: "Test the Pachyderm githook feature"
+#standby: true
+transform:
+  image: python
+  cmd:
+    - "/pfs/git/main.sh"
+    - "--src"
+    - "/pfs/git/"
+    - "--input"
+    - "/pfs/data/"
+    - "--output"
+    - "/pfs/out"
+#resource_requests:
+#  memory: "2G"
+#  cpu: 1
+resource_limits:
+  memory: "100M"
+  cpu: 0.5
+#parallelism_spec:
+#  constant: 2  # use N computers
+#output_branch: 2020-04-24_01
+input:
+  cross:
+    - pfs:
+        name: data
+        repo: githook-test-input
+        glob: "/*/*"
+    - git:
+        url: "https://github.com/blairdrummond/pachyderm-githook-test.git"
+        name: git
+        branch: master
